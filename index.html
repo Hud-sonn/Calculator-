@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple Anime Blog</title>
+<style>
+  :root {
+    --bg-light: #f9f9f9;
+    --text-light: #222;
+    --bg-dark: #121212;
+    --text-dark: #eee;
+    --card-bg-light: #fff;
+    --card-bg-dark: #1e1e1e;
+    --accent: #3b82f6;
+  }
+  body {
+    margin: 0; font-family: Arial, sans-serif;
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+  }
+  body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem;
+    background: var(--card-bg-light);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  body.dark header {
+    background: var(--card-bg-dark);
+  }
+  h1 {
+    margin: 0; font-size: 1.5rem;
+  }
+  button.toggle-btn {
+    background: var(--accent);
+    color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  main {
+    padding: 1rem;
+    max-width: 700px;
+    margin: auto;
+  }
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;
+  }
+  input[type="search"], select {
+    flex: 1 1 150px;
+    padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;
+    font-size: 1rem;
+  }
+  body.dark input[type="search"], body.dark select {
+    background: #333; color: #eee; border-color: #555;
+  }
+  .post {
+    background: var(--card-bg-light);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    transition: background 0.3s, color 0.3s;
+  }
+  body.dark .post {
+    background: var(--card-bg-dark);
+  }
+  .post img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+  .post-content {
+    padding: 1rem;
+  }
+  .post-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.25rem;
+  }
+  .post-genre {
+    font-size: 0.85rem;
+    color: #666;
+  }
+  body.dark .post-genre {
+    color: #aaa;
+  }
+  .post-summary {
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 480px) {
+    header, main {
+      padding: 0.5rem;
+    }
+    .post img {
+      height: 140px;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Anime Blog</h1>
+  <button class="toggle-btn" id="toggleDark">Dark Mode</button>
+</header>
+<main>
+  <div class="filters">
+    <input type="search" id="searchInput" placeholder="Search anime..." />
+    <select id="genreSelect">
+      <option value="All">All Genres</option>
+      <option value="Action">Action</option>
+      <option value="Romance">Romance</option>
+      <option value="Adventure">Adventure</option>
+      <option value="Fantasy">Fantasy</option>
+      <option value="Thriller">Thriller</option>
+    </select>
+  </div>
+  <div id="postsContainer"></div>
+</main>
+<script>
+  const posts = [
+    {
+      title: "Attack on Titan",
+      genre: "Action",
+      summary: "Humanity battles Titans behind massive walls.",
+      image: "https://upload.wikimedia.org/wikipedia/en/7/70/Shingeki_no_Kyojin_manga_volume_1.jpg",
+    },
+    {
+      title: "Demon Slayer",
+      genre: "Action",
+      summary: "A boy fights demons while seeking a cure for his sister.",
+      image: "https://upload.wikimedia.org/wikipedia/en/2/2d/Kimetsu_no_Yaiba_Volume_1.png",
+    },
+    {
+      title: "Your Name",
+      genre: "Romance",
+      summary: "Two teens mysteriously swap bodies and connect across time.",
+      image: "https://upload.wikimedia.org/wikipedia/en/0/0b/Your_Name_poster.png",
+    },
+    {
+      title: "Naruto",
+      genre: "Adventure",
+      summary: "A ninja boy dreams of becoming Hokage.",
+      image: "https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg",
+    },
+    {
+      title: "Death Note",
+      genre: "Thriller",
+      summary: "A high schooler uses a notebook to kill criminals.",
+      image: "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+    },
+    {
+      title: "Spirited Away",
+      genre: "Fantasy",
+      summary: "A girl enters a spirit world and must save her parents.",
+      image: "https://upload.wikimedia.org/wikipedia/en/3/30/Spirited_Away_poster.JPG",
+    },
+    {
+      title: "Jujutsu Kaisen",
+      genre: "Action",
+      summary: "A boy consumes a cursed object to battle evil spirits.",
+      image: "https://upload.wikimedia.org/wikipedia/en/e/e7/Jujutsu_kaisen_vol_1.jpg",
+    },
+    {
+      title: "One Piece",
+      genre: "Adventure",
+      summary: "Luffy and crew sail the seas to find the One Piece treasure.",
+      image: "https://upload.wikimedia.org/wikipedia/en/6/65/One_Piece_1.jpg",
+    },
+    {
+      title: "Clannad",
+      genre: "Romance",
+      summary: "A heartwarming and emotional tale of school life and family.",
+      image: "https://upload.wikimedia.org/wikipedia/en/b/b8/Clannad_game_cover.jpg",
+    },
+  ];
+
+  const postsContainer = document.getElementById("postsContainer");
+  const searchInput = document.getElementById("searchInput");
+  const genreSelect = document.getElementById("genreSelect");
+  const toggleDark = document.getElementById("toggleDark");
+
+  function renderPosts() {
+    const search = searchInput.value.toLowerCase();
+    const genre = genreSelect.value;
+    postsContainer.innerHTML = "";
+
+    const filtered = posts.filter(post => {
+      const matchesSearch = post.title.toLowerCase().includes(search);
+      const matchesGenre = genre === "All" || post.genre === genre;
+      return matchesSearch && matchesGenre;
+    });
+
+    if(filtered.length === 0) {
+      postsContainer.innerHTML = "<p>No posts found.</p>";
+      return;
+    }
+
+    filtered.forEach(post => {
+      const postEl = document.createElement("div");
+      postEl.className = "post";
+      postEl.innerHTML = `
+        <img src="${post.image}" alt="${post.title}" />
+        <div class="post-content">
+          <h2 class="post-title">${post.title}</h2>
+          <div class="post-genre">${post.genre}</div>
+          <p class="post-summary">${post.summary}</p>
+        </div>
+      `;
+      postsContainer.appendChild(postEl);
+    });
+  }
+
+  searchInput.addEventListener("input", renderPosts);
+  genreSelect.addEventListener("change", renderPosts);
+
+  toggleDark.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    toggleDark.textContent = document.body.classList.contains("dark") ? "Light Mode" : "Dark Mode";
+  });
+
+  // Initial render
+  renderPosts();
+</script>
+</body>
+  </html>
