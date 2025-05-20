@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hiro's Anime Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+  <!-- Header -->
+  <header class="p-4 flex justify-between items-center bg-gray-800 shadow-lg">
+    <h1 class="text-2xl font-extrabold tracking-wide">Hiro’s Anime World</h1>
+    <nav class="space-x-4 text-sm md:text-base">
+      <a href="index.html" class="hover:underline">Home</a>
+      <a href="profile.html" class="hover:underline">Profile</a>
+      <a href="faq.html" class="hover:underline">FAQ</a>
+      <a href="contact.html" class="hover:underline">Contact</a>
+      <a href="help.html">Help</a>
+    </nav>
+    <button id="themeToggle" class="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600 transition">Toggle Theme</button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="p-6 space-y-10">
+    
+    <!-- Hero Section -->
+    <section class="text-center space-y-2">
+      <h2 class="text-4xl font-bold animate-fade-in">Discover Iconic Anime</h2>
+      <p class="text-gray-400 animate-fade-in-slow">From classics to trending, dive into genres with deep dives and ratings!</p>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="max-w-lg mx-auto">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search anime..."
+        class="w-full p-3 rounded bg-gray-800 text-white focus:ring-2 ring-blue-500 outline-none transition"
+      />
+    </section>
+
+    <!-- Trending Anime -->
+    <section>
+      <h3 class="text-2xl font-semibold mb-4">🔥 Trending Anime</h3>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-gray-800 p-4 rounded-lg shadow hover:scale-105 transition-transform duration-300">
+          <img src="assets/anime-images/aot.jpg" alt="Attack on Titan" class="w-full rounded-lg mb-3" />
+          <h4 class="font-bold text-lg">Attack on Titan</h4>
+          <p class="text-sm text-gray-400">Humanity's survival in a Titan-filled world.</p>
+        </div>
+        <!-- More trending cards can be added here -->
+      </div>
+    </section>
+
+    <!-- Genre Links -->
+    <section>
+      <h3 class="text-2xl font-semibold my-4">Explore by Genre</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="genre-shonen.html" class="genre-btn bg-blue-600">Shounen</a>
+        <a href="genre-romance.html" class="genre-btn bg-pink-500">Romance</a>
+        <!-- Add more genres as needed -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 p-4 mt-10 bg-gray-800">
+    &copy; 2025 Hiro’s Anime Blog. All rights reserved.
+  </footer>
+
+  <!-- Animation Styles -->
+  <style>
+    .genre-btn {
+      @apply text-center p-3 rounded font-semibold text-white hover:brightness-110 hover:scale-105 transition transform duration-300;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .animate-fade-in-slow {
+      animation: fadeIn 1s ease-out forwards;
+    }
+  </style>
+<!-- Watchlist Popup -->
+<div id="watchlistPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg max-w-sm w-full animate-scaleIn">
+    <h2 class="text-xl font-semibold mb-3">Added to Watchlist!</h2>
+    <p class="text-gray-300 mb-4">Would you like to view your Watchlist now?</p>
+    <div class="flex justify-end gap-3">
+      <a href="watchlist.html" id="yesBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-1 rounded">Yes</a>
+      <button onclick="closePopup()" class="bg-gray-600 hover:bg-gray-700 px-4 py-1 rounded">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let popupTimeout;
+
+  function addToWatchlist(button) {
+    // Optional: get anime name from a data attribute or nearby text
+    // Save to localStorage here if needed...
+
+    showPopup(); // Show confirmation popup
+  }
+
+  function showPopup() {
+    const popup = document.getElementById("watchlistPopup");
+    popup.classList.remove("hidden");
+
+    clearTimeout(popupTimeout);
+    popupTimeout = setTimeout(() => {
+      closePopup();
+    }, 3000);
+  }
+
+  function closePopup() {
+    document.getElementById("watchlistPopup").classList.add("hidden");
+  }
+</script>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

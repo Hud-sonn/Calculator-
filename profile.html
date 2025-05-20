@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile – Hiro's Anime Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .bounce-avatar {
+      animation: bounce 0.5s;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col transition-colors duration-300">
+  <header class="p-4 bg-gray-800 shadow flex justify-between items-center">
+    <h1 class="text-xl font-bold">Hiro's Anime World</h1>
+    <nav class="space-x-4">
+      <a href="index.html" class="hover:underline">Home</a>
+      <a href="faq.html" class="hover:underline">FAQ</a>
+      <a href="contact.html" class="hover:underline">Contact</a>
+    </nav>
+  </header>
+
+  <main class="flex-grow p-6 max-w-xl mx-auto space-y-6">
+    <h2 class="text-3xl font-bold text-center">Edit Your Profile</h2>
+
+    <!-- Avatar Preview -->
+    <div class="text-center">
+      <img id="avatarImg" src="assets/avatars/default.png" alt="Your Avatar"
+           class="w-24 h-24 rounded-full mx-auto border-4 border-blue-400 shadow-lg transition-transform duration-500" />
+      <input type="file" id="avatarInput" accept="image/*" class="mt-2 block mx-auto text-sm" />
+      <p class="text-sm text-gray-400 mt-1">Choose a new avatar image</p>
+    </div>
+
+    <!-- Name Input -->
+    <div>
+      <label for="nameInput" class="block font-semibold mb-1">Display Name:</label>
+      <input type="text" id="nameInput"
+             class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none" />
+    </div>
+
+    <!-- Theme Selector -->
+    <div>
+      <label for="themeSelect" class="block font-semibold mb-1">Select Theme:</label>
+      <select id="themeSelect"
+              class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="cyber">Cyber Neon</option>
+        <option value="pastel">Soft Pastel</option>
+        <option value="classic">Classic Anime</option>
+      </select>
+    </div>
+
+    <!-- Save Button -->
+    <button id="saveName"
+            class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 w-full transition">
+      Save Changes
+    </button>
+
+    <!-- Reset Button -->
+    <button id="resetBtn"
+            class="bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 w-full transition">
+      Reset Profile
+    </button>
+
+    <!-- Preview Panel -->
+    <div class="bg-gray-800 p-4 rounded shadow mt-4">
+      <h3 class="text-lg font-semibold mb-2">Preview:</h3>
+      <p><strong>Name:</strong> <span id="profileName">User123</span></p>
+      <p><strong>Avatar:</strong> Displayed above</p>
+    </div>
+  </main>
+
+  <footer class="text-center text-gray-400 p-4 bg-gray-800">
+    &copy; 2025 Hiro’s Anime Blog. All rights reserved.
+  </footer>
+
+  <script>
+    const nameInput = document.getElementById("nameInput");
+    const profileName = document.getElementById("profileName");
+    const avatarImg = document.getElementById("avatarImg");
+    const avatarInput = document.getElementById("avatarInput");
+    const themeSelect = document.getElementById("themeSelect");
+
+    function loadProfile() {
+      nameInput.value = localStorage.getItem("username") || "";
+      profileName.textContent = nameInput.value || "User123";
+      const avatar = localStorage.getItem("avatar");
+      if (avatar) avatarImg.src = avatar;
+      const theme = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", theme);
+      themeSelect.value = theme;
+    }
+
+    // Save changes
+    document.getElementById("saveName").addEventListener("click", () => {
+      localStorage.setItem("username", nameInput.value);
+      profileName.textContent = nameInput.value || "User123";
+    });
+
+    // Upload new avatar
+    avatarInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          avatarImg.classList.add("bounce-avatar");
+          avatarImg.src = evt.target.result;
+          localStorage.setItem("avatar", evt.target.result);
+          setTimeout(() => avatarImg.classList.remove("bounce-avatar"), 600);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Theme switching
+    themeSelect.addEventListener("change", () => {
+      const theme = themeSelect.value;
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    });
+
+    // Reset profile
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      localStorage.clear();
+      location.reload();
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>
